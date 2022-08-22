@@ -74,6 +74,14 @@ class VideoController {
             throw error
         }
     }
+
+    async concatVideo(nameVideo1: string, nameVideo2:string, numberCpusAvailables: number) {
+        try {
+            await SonyVegasController.concatVideo(nameVideo1, nameVideo2, numberCpusAvailables)
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 export default new VideoController()

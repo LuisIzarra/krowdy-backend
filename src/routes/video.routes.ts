@@ -33,4 +33,15 @@ router.post('/cutvideo', async (req, res): Promise<Response> => {
   }
 });
 
+router.post('/concatvideo', async (req, res): Promise<Response> => {
+  try {
+    const {nameVideo1, nameVideo2, numberCpusAvailables} = req.body
+    console.log("🚀 ~ file: video.routes.ts ~ line 39 ~ router.get ~ nameVideo1: %O, nameVideo2: %O", nameVideo1, nameVideo2)
+    await videoController.concatVideo(nameVideo1, nameVideo2, numberCpusAvailables)
+    return res.json({ success: true, });
+  } catch (error) {
+    return res.json({succes: false, error: error.stack})
+  }
+});
+
 export default router;

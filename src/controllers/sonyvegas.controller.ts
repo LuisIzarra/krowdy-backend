@@ -6,8 +6,10 @@ import uuid4 from "uuid4";
 
 class SonyVegasByBootcamp {
     dirVideos: string;
+    dirVideos1: string;
     constructor(){
         this.dirVideos = `${__dirname.split('/').slice(0,5).join('/')}/srcvideos`
+        this.dirVideos1 = "src/srcvideos/"
     }
     async ffmpeg(argsFfmpeg: any) {
         try {
@@ -66,6 +68,67 @@ class SonyVegasByBootcamp {
             ]
 
             await this.ffmpeg(args)
+        } catch (error) {
+            console.log("🚀 ~ file: sonyvegas.controller.ts ~ line 67 ~ SonyVegasByBootcamp ~ cutVideo ~ error", error)
+            throw error
+        }
+    }
+
+    async concatVideo(nameVideo1: string, nameVideo2:string, numberCpusAvailables = 4) {
+        try {
+            let extensionVideo = '.mp4'
+            let extensionVideoTs = '.ts'
+            let nameVideo3 = "concatOut"
+            let srcVideoOutput1Name = `${nameVideo1}-${uuid4()}${extensionVideoTs}`
+            let srcVideoOutput2Name = `${nameVideo2}-${uuid4()}${extensionVideoTs}`
+
+            let videoSource = {
+                srcVideo1: `${this.dirVideos}/${nameVideo1}${extensionVideo}`,
+                srcVideo2: `${this.dirVideos}/${nameVideo2}${extensionVideo}`,
+                srcVideoOutput1: `${this.dirVideos}/${srcVideoOutput1Name}`,
+                srcVideoOutput2: `${this.dirVideos}/${srcVideoOutput2Name}`,
+                srcVideoOutput3: `${this.dirVideos}/${nameVideo3}-${uuid4()}${extensionVideo}`
+            }
+            // ffmpeg -y -i video_5.mp4 -threads 4 -ss 00:00:00 -to 00:00:20 -async 1 video_5_cut.mp4
+            console.log("🚀 ~ file: sonyvegas.controller.ts ~ line 53 ~ SonyVegasByBootcamp ~ cutVideo ~ videoSource", videoSource)
+            let args = [
+                '-y',
+                '-i',
+                videoSource?.srcVideo1,
+                `-threads ${numberCpusAvailables}`,
+                `-c copy`,
+                `-bsf:v h264_mp4toannexb`,
+                `-f mpegts`,
+                '-async 1',
+                videoSource?.srcVideoOutput1
+            ]
+
+            await this.ffmpeg(args)
+
+            let args2 = [
+                '-y',
+                '-i',
+                videoSource?.srcVideo2,
+                `-threads ${numberCpusAvailables}`,
+                `-c copy`,
+                `-bsf:v h264_mp4toannexb`,
+                `-f mpegts`,
+                '-async 1',
+                videoSource?.srcVideoOutput2
+            ]
+
+            await this.ffmpeg(args2)
+
+            let args3 = [
+                '-y',
+                `-i "concat:${this.dirVideos1}${srcVideoOutput1Name}|${this.dirVideos1}${srcVideoOutput2Name}"`,
+                `-threads ${numberCpusAvailables}`,
+                `-c copy`,
+                '-async 1',
+                videoSource?.srcVideoOutput3
+            ]
+
+            await this.ffmpeg(args3)
         } catch (error) {
             console.log("🚀 ~ file: sonyvegas.controller.ts ~ line 67 ~ SonyVegasByBootcamp ~ cutVideo ~ error", error)
             throw error
