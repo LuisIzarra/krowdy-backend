@@ -170,7 +170,7 @@ class SonyVegasByBootcamp {
     try {
       //   const client = youtube.youtube({
       //     version: "v3",
-      //     auth: "AIzaSyBLHhdG3xlrLDeruHSGz7wHYzlbC4CDy4E", // specify your API key here
+      //     auth: "", // specify your API key here
       //   });
 
       const auth = new google.auth.GoogleAuth({
