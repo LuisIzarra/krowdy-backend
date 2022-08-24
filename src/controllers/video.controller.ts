@@ -82,6 +82,14 @@ class VideoController {
             throw error
         }
     }
+
+    async uploadVideo(uploadVideo: string, numberCpusAvailables: number) {
+        try {
+            await SonyVegasController.uploadVideo(uploadVideo, numberCpusAvailables)
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 export default new VideoController()

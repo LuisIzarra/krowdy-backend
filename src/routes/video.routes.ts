@@ -44,4 +44,15 @@ router.post('/concatvideo', async (req, res): Promise<Response> => {
   }
 });
 
+router.post('/uploadvideo', async (req, res): Promise<Response> => {
+  try {
+    const {uploadvideo, numberCpusAvailables} = req.body
+    console.log("🚀 ~ file: video.routes.ts ~ line  ~ router.get ~ uploadVideo: %O", uploadvideo)
+    await videoController.uploadVideo(uploadvideo, numberCpusAvailables)
+    return res.json({ success: true, });
+  } catch (error) {
+    return res.json({succes: false, error: error.stack})
+  }
+});
+
 export default router;
